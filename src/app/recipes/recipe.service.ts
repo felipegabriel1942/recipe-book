@@ -8,8 +8,8 @@ import { Subject } from 'rxjs';
 export class RecipeService {
   recipeSelected = new Subject<Recipe>();
   recipesChanged = new Subject<Recipe[]>();
-
-  private recipes: Recipe[] = [
+  private recipes: Recipe[] = [];
+  /*private recipes: Recipe[] = [
     new Recipe(
       'Massa de pizza',
       'Simples e fácil de fazer',
@@ -28,9 +28,14 @@ export class RecipeService {
         new Ingredient('Xícara (chá) de leite', 4),
         new Ingredient('Xícara (chá) de açucar', 2)
       ])
-  ];
+  ];*/
 
   constructor(private shoppingListService: ShoppingListService) {}
+
+  setRecipes(recipes: Recipe[]) {
+    this.recipes = recipes;
+    this.recipesChanged.next(this.recipes.slice());
+  }
 
   getRecipes() {
     return this.recipes.slice();

@@ -1,17 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { RecipeService } from '../recipe.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-recipe-edit',
   templateUrl: './recipe-edit.component.html',
   styleUrls: ['./recipe-edit.component.css']
 })
-export class RecipeEditComponent implements OnInit {
+export class RecipeEditComponent implements OnInit, OnDestroy {
+
   id: number;
   editMode = false;
   recipeForm: FormGroup;
+  subscription: Subscription;
 
   constructor(private route: ActivatedRoute,
               private recipeService: RecipeService,
@@ -45,6 +48,10 @@ export class RecipeEditComponent implements OnInit {
         ])
       })
     );
+  }
+
+  onDeleteIngredient(index: number) {
+    (<FormArray>this.recipeForm.get('ingredients')).removeAt(index);
   }
 
   onCancel() {
@@ -87,6 +94,9 @@ export class RecipeEditComponent implements OnInit {
       description: new FormControl(recipeDescription, Validators.required),
       ingredients: recipeIngredients
     });
+  }
+
+  ngOnDestroy() {
 
   }
 }
